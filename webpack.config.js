@@ -24,6 +24,17 @@ module.exports = {
                     'css-loader' // Read the conten of the css and return the contents, wala na syang gagawing iba
 
                     // npm install css-loader style-loader --save-dev
+                    // REMEMBER NA RIGHT TO LEFT YUNG PAG READ SA LOADER 
+                ]
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'style-loader', // This will take the css and inject it into the page using style-text, BTW using style-loader it will bundle css together with your Javascript into a single file called bundle.js
+                    'css-loader', // Read the conten of the css and return the contents, wala na syang gagawing iba
+                    'sass-loader'
+                    // npm install css-loader style-loader sass-loader --save-dev
+                    // REMEMBER NA RIGHT TO LEFT YUNG PAG READ SA LOADER 
                 ]
             }
         ]

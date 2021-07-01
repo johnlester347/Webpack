@@ -1,8 +1,9 @@
-const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
+const path = require('path'); // This is for the path of bundle.js, you dont need to install to use this just install webpack and youre good to go
+const TerserPlugin = require('terser-webpack-plugin'); // ginagamit to pang minify ng code 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/index.js',// Ginagamit to para pag samahin yung css saka javascript without linking the css in the INDEX.HTML
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, './dist')
@@ -19,20 +20,22 @@ module.exports = {
                     // npm install file-loader --save-dev
                 ]
             },
-            {
+            { // Ginagamit to para pag samahin yung css saka javascript without linking the css in the INDEX.HTML
                 test: /\.css$/,
                 use: [
-                    'style-loader', // This will take the css and inject it into the page using style-text, BTW using style-loader it will bundle css together with your Javascript into a single file called bundle.js
+                    // 'style-loader', // This will take the css and inject it into the page using style-text, BTW using style-loader it will bundle css together with your Javascript into a single file called bundle.js
+                    MiniCssExtractPlugin.loader, // Ginagamit to para i separate yung css bali magiging dalawang bundle sya bundle.js bundle.css
                     'css-loader' // Read the conten of the css and return the contents, wala na syang gagawing iba
 
                     // npm install css-loader style-loader --save-dev
                     // REMEMBER NA RIGHT TO LEFT YUNG PAG READ SA LOADER 
                 ]
             },
-            {
+            { // Ginagamit to para pag samahin yung css saka javascript without linking the css in the INDEX.HTML
                 test: /\.scss$/,
                 use: [
-                    'style-loader', // This will take the css and inject it into the page using style-text, BTW using style-loader it will bundle css together with your Javascript into a single file called bundle.js
+                    // 'style-loader', // This will take the css and inject it into the page using style-text, BTW using style-loader it will bundle css together with your Javascript into a single file called bundle.js
+                    MiniCssExtractPlugin.loader, // Ginagamit to para i separate yung css bali magiging dalawang bundle sya bundle.js bundle.css
                     'css-loader', // Read the conten of the css and return the contents, wala na syang gagawing iba
                     'sass-loader'
                     // npm install css-loader style-loader sass-loader --save-dev
@@ -55,7 +58,12 @@ module.exports = {
         ]
     },
     plugins: [
-        new TerserPlugin()
+        new TerserPlugin(), // Ginagamit to pang minify ng file
+        new MiniCssExtractPlugin({ // Ginagamit to sa pag bundle ng css 
+            filename: 'style.css',
+        })
+
+        //npm install mini-css-extract-plugin --save-dev
         // npm install --save-dev terser-webpack-plugin
     ]
 }

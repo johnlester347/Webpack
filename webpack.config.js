@@ -1,11 +1,14 @@
 const path = require('path'); // This is for the path of bundle.js, you dont need to install to use this just install webpack and youre good to go
 const TerserPlugin = require('terser-webpack-plugin'); // ginagamit to pang minify ng code 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');  // Ginagamit to sa pag bundle ng css into another file
+const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // Ginagamit to sa pag clean ng dist folder everytime na mag run yung webpack
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 module.exports = {
     entry: './src/index.js',// Ginagamit to para pag samahin yung css saka javascript without linking the css in the INDEX.HTML
     output: {
-        filename: 'bundle.js',
+        filename: 'bundle.[contenthash].js',
         path: path.resolve(__dirname, './dist')
         // publicPath: '/dist'
         // publicPath: 'https://etoyungdirectorybagoyungimgorfile/(dito-mo-mapupunta-yung-file-after-building)'
@@ -54,17 +57,43 @@ module.exports = {
                         // npm install --save-dev @babel/preset-env
                     }
                 }
+            },
+            {
+                test: /\.hbs$/,
+                use: [
+                    'handlebars-loader' // Ginagamit to sa pag add ng modified content na nasa index.hbs
+                    // npm install handlebars-loader --save-dev
+                    // npm install handlebars --save
+                ]
             }
         ]
     },
     plugins: [
         new TerserPlugin(), // Ginagamit to pang minify ng file
         new MiniCssExtractPlugin({ // Ginagamit to sa pag bundle ng css 
-            filename: 'style.css',
+            filename: 'style.[contenthash].css',
+        }),
+        new CleanWebpackPlugin({ // Ginagamit sa pag clean ng files or laman ng dist folder everytime we run webpack
+            cleanOnceBeforeBuildPatterns: [
+                '**/*', // Eto yung location ng dist 
+                path.join(process.cwd(), 'build/**/*') // eto yung location ng build folder na maddelete din yung laman after we run webpack
+            ]
+        }),
+        new HtmlWebpackPlugin({
+            title: 'Hello World', // Eto yung title ng index.html
+            // filename: 'subfolder/custom_filename.html'
+            filename: 'index.html', // Eto yung name ng file na maiinject sa dist folder na naka specify sa output folder
+            // template: './index.html', // Eto yung location ng index.html na ma cocopy or ma iinjext sa dist folder 
+            template: './src/index.hbs',
+            description: 'Some description'
+            // meta: {
+            //     description: 'Some description'
+            // }
         })
-
-        //npm install mini-css-extract-plugin --save-dev
         // npm install --save-dev terser-webpack-plugin
+        //npm install mini-css-extract-plugin --save-dev
+        //npm install clean-webpack-plugin --save-dev
+        // npm install html-webpack-plugin --save-dev
     ]
 }
 
